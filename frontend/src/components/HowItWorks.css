@@ -1,0 +1,20 @@
+.how-it-works{
+    padding:80px 60px;
+    background:#F8FAFC;
+}
+
+.steps{
+    display:flex;
+    justify-content:center;
+    gap:30px;
+    flex-wrap:wrap;
+}
+
+.step{
+    width:250px;
+    padding:25px;
+    background:white;
+    border-radius:15px;
+    box-shadow:0 8px 20px rgba(0,0,0,.08);
+    text-align:center;
+}
