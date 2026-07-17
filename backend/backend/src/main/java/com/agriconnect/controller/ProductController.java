@@ -147,4 +147,22 @@ public class ProductController {
 
         return productService.getProductsByCategory(category);
     }
+    
+    @GetMapping("/search")
+    public List<Product> searchProduct(@RequestParam String productName) {
+        return productService.searchByProductName(productName);
+    }
+
+    @GetMapping("/category")
+    public List<Product> filterByCategory(@RequestParam String category) {
+        return productService.filterByCategory(category);
+    }
+
+    @GetMapping("/search-category")
+    public List<Product> searchByProductAndCategory(
+            @RequestParam String productName,
+            @RequestParam String category) {
+
+        return productService.searchByProductNameAndCategory(productName, category);
+    }
 }

@@ -61,6 +61,8 @@ public class CustomerController {
         if (customer != null) {
 
             String token = jwtUtil.generateToken(customer.getEmail());
+            System.out.println("Generated Token: " + token);
+         
 
             return new LoginResponse(
                     true,
