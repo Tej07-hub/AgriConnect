@@ -74,15 +74,18 @@ public class RetailerController {
             return new LoginResponse(
                     true,
                     "Login Successful",
-                    token
+                    token,
+                    retailer.getRetailerId()
             );
         }
 
         return new LoginResponse(
                 false,
                 "Invalid Email or Password",
+                null,
                 null
         );
+    
     }
     
     // Get All Retailers

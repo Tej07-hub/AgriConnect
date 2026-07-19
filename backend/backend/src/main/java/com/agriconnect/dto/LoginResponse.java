@@ -5,14 +5,16 @@ public class LoginResponse {
     private boolean success;
     private String message;
     private String token;
+    private Integer customerId;
 
     public LoginResponse() {
     }
 
-    public LoginResponse(boolean success, String message, String token) {
+    public LoginResponse(boolean success, String message, String token, Integer customerId) {
         this.success = success;
         this.message = message;
         this.token = token;
+        this.customerId = customerId;
     }
 
     public boolean isSuccess() {
@@ -37,5 +39,13 @@ public class LoginResponse {
 
     public void setToken(String token) {
         this.token = token;
+    }
+
+    public Integer getCustomerId() {
+        return customerId;
+    }
+
+    public void setCustomerId(Integer customerId) {
+        this.customerId = customerId;
     }
 }

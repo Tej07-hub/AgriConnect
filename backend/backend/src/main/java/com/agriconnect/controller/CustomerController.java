@@ -49,10 +49,8 @@ public class CustomerController {
 
         return new ApiResponse(true, "Customer registered successfully");
     }
-
     @PostMapping("/login")
-    public LoginResponse loginCustomer(
-            @RequestBody LoginRequest request) {
+    public LoginResponse loginCustomer(@RequestBody LoginRequest request) {
 
         Customer customer = customerService.login(
                 request.getEmail(),
@@ -61,20 +59,21 @@ public class CustomerController {
         if (customer != null) {
 
             String token = jwtUtil.generateToken(customer.getEmail());
-            System.out.println("Generated Token: " + token);
-         
 
             return new LoginResponse(
                     true,
                     "Login Successful",
-                    token
+                    token,
+                    customer.getCustomerId()
             );
         }
 
         return new LoginResponse(
                 false,
                 "Invalid Email or Password",
+                null,
                 null
         );
+    
     }
 }
