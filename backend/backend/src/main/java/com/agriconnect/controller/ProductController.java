@@ -3,31 +3,34 @@ package com.agriconnect.controller;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
-import com.agriconnect.entity.Product;
-import com.agriconnect.service.ProductService;
-
-import org.springframework.security.core.Authentication;
 import com.agriconnect.dto.ProductRequest;
+import com.agriconnect.dto.StockRequest;
+import com.agriconnect.entity.Product;
 import com.agriconnect.entity.Retailer;
 import com.agriconnect.repository.RetailerRepository;
+import com.agriconnect.service.ProductService;
 
 @RestController
 @RequestMapping("/api/products")
 @CrossOrigin(origins = {
-	    "http://localhost:5173",
-	    "http://localhost:5174"
-	})
+        "http://localhost:5173",
+        "http://localhost:5174"
+})
 public class ProductController {
 
     @Autowired
     private ProductService productService;
-    
+
     @Autowired
     private RetailerRepository retailerRepository;
 
+    // ==========================
     // Add Product
+    // ==========================
     @PostMapping
     public Product addProduct(@RequestBody ProductRequest request,
                               Authentication authentication) {
@@ -47,14 +50,17 @@ public class ProductController {
         product.setUnit(request.getUnit());
         product.setImageUrl(request.getImageUrl());
 
-        // Automatically assign the logged-in retailer
+        // Assign logged-in retailer
         product.setRetailerId(retailer.getRetailerId());
 
         return productService.addProduct(product);
     }
-    // Get All Products
-    @GetMapping
-    public List<Product> getAllProducts(Authentication authentication) {
+
+    // ==========================
+    // Get Logged-in Retailer's Products
+    // ==========================
+    @GetMapping("/my-products")
+    public List<Product> getMyProducts(Authentication authentication) {
 
         String email = authentication.getName();
 
@@ -65,26 +71,35 @@ public class ProductController {
                 retailer.getRetailerId());
     }
 
+    // ==========================
+    // Get All Products
+    // ==========================
+    @GetMapping
+    public List<Product> getAllProducts() {
+        return productService.getAllProducts();
+    }
+
+    // ==========================
     // Get Product By ID
+    // ==========================
     @GetMapping("/{id}")
     public Product getProductById(@PathVariable Integer id) {
         return productService.getProductById(id);
     }
 
+    // ==========================
     // Update Product
+    // ==========================
     @PutMapping("/{id}")
     public Product updateProduct(@PathVariable Integer id,
                                  @RequestBody ProductRequest request,
                                  Authentication authentication) {
 
-        // Logged-in retailer email
         String email = authentication.getName();
 
-        // Find retailer
         Retailer retailer = retailerRepository.findByEmail(email)
                 .orElseThrow(() -> new RuntimeException("Retailer not found"));
 
-        // Find product owned by this retailer
         Product product = productService.getProductByIdAndRetailerId(
                 id,
                 retailer.getRetailerId());
@@ -93,7 +108,6 @@ public class ProductController {
             throw new RuntimeException("Product not found or access denied");
         }
 
-        // Update fields
         product.setName(request.getName());
         product.setDescription(request.getDescription());
         product.setCategory(request.getCategory());
@@ -105,19 +119,18 @@ public class ProductController {
         return productService.updateProduct(product);
     }
 
+    // ==========================
     // Delete Product
+    // ==========================
     @DeleteMapping("/{id}")
     public String deleteProduct(@PathVariable Integer id,
                                 Authentication authentication) {
 
-        // Logged-in retailer email
         String email = authentication.getName();
 
-        // Find retailer
         Retailer retailer = retailerRepository.findByEmail(email)
                 .orElseThrow(() -> new RuntimeException("Retailer not found"));
 
-        // Find product owned by this retailer
         Product product = productService.getProductByIdAndRetailerId(
                 id,
                 retailer.getRetailerId());
@@ -130,27 +143,30 @@ public class ProductController {
 
         return "Product deleted successfully";
     }
-    
+
+    // ==========================
+    // Customer APIs
+    // ==========================
+
     @GetMapping("/customer")
     public List<Product> getProductsForCustomers() {
         return productService.getAllProducts();
     }
-    
-    @GetMapping("/customer/search")
-    public List<Product> searchProducts(
-            @RequestParam String keyword) {
 
+    @GetMapping("/customer/search")
+    public List<Product> searchProducts(@RequestParam String keyword) {
         return productService.searchProducts(keyword);
     }
-    
+
     @GetMapping("/customer/category/{category}")
     public List<Product> getProductsByCategory(@PathVariable String category) {
-
-        System.out.println("CATEGORY API HIT: " + category);
-
         return productService.getProductsByCategory(category);
     }
-    
+
+    // ==========================
+    // Search APIs
+    // ==========================
+
     @GetMapping("/search")
     public List<Product> searchProduct(@RequestParam String productName) {
         return productService.searchByProductName(productName);
@@ -167,5 +183,24 @@ public class ProductController {
             @RequestParam String category) {
 
         return productService.searchByProductNameAndCategory(productName, category);
+    }
+    
+    @PatchMapping("/{productId}/stock")
+    public ResponseEntity<Product> updateStock(
+            @PathVariable Integer productId,
+            @RequestBody StockRequest request,
+            Authentication authentication) {
+
+        String email = authentication.getName();
+
+        Retailer retailer = retailerRepository.findByEmail(email)
+                .orElseThrow(() -> new RuntimeException("Retailer not found"));
+
+        Product product = productService.updateStock(
+                productId,
+                retailer.getRetailerId(),
+                request.getStock());
+
+        return ResponseEntity.ok(product);
     }
 }

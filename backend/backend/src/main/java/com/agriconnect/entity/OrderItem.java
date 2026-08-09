@@ -1,7 +1,8 @@
 package com.agriconnect.entity;
 
-import jakarta.persistence.*;
 import java.math.BigDecimal;
+
+import jakarta.persistence.*;
 
 @Entity
 @Table(name = "order_items")
@@ -9,23 +10,30 @@ public class OrderItem {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    
-    @Column(name = "order_item_id")
     private Integer orderItemId;
-
-    @Column(name = "retailer_id")
-    private Integer retailerId;
-   
 
     private Integer orderId;
 
     private Integer productId;
 
+    private Integer retailerId;
+
     private Integer quantity;
 
     private BigDecimal price;
+    
+    @Column(nullable = false)
+    private String status = "PLACED";
 
-    public OrderItem() {
+    public String getStatus() {
+		return status;
+	}
+
+	public void setStatus(String status) {
+		this.status = status;
+	}
+
+	public OrderItem() {
     }
 
     public Integer getOrderItemId() {
@@ -52,6 +60,14 @@ public class OrderItem {
         this.productId = productId;
     }
 
+    public Integer getRetailerId() {
+        return retailerId;
+    }
+
+    public void setRetailerId(Integer retailerId) {
+        this.retailerId = retailerId;
+    }
+
     public Integer getQuantity() {
         return quantity;
     }
@@ -66,13 +82,5 @@ public class OrderItem {
 
     public void setPrice(BigDecimal price) {
         this.price = price;
-    }
-    
-    public Integer getRetailerId() {
-        return retailerId;
-    }
-
-    public void setRetailerId(Integer retailerId) {
-        this.retailerId = retailerId;
     }
 }

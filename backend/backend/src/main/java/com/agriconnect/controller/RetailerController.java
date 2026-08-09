@@ -1,13 +1,18 @@
 package com.agriconnect.controller;
 import com.agriconnect.dto.LoginResponse;
 
+
+
 import java.util.List;
 
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import com.agriconnect.entity.Notification;
 import com.agriconnect.entity.Retailer;
+import com.agriconnect.service.DashboardService;
+import com.agriconnect.service.NotificationService;
 import com.agriconnect.service.RetailerService;
 
 import com.agriconnect.dto.RegisterRequest;
@@ -17,6 +22,15 @@ import com.agriconnect.dto.ApiResponse;
 import com.agriconnect.security.JwtUtil;
 import com.agriconnect.dto.LoginResponse;
 import com.agriconnect.security.JwtUtil;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+
+import com.agriconnect.dto.RetailerProfileResponse;
+import com.agriconnect.dto.UpdateRetailerProfileRequest;
+import com.agriconnect.dto.RetailerDashboardResponse;
+import com.agriconnect.service.DashboardService;
 
 @RestController
 @RequestMapping("/api/retailers")
@@ -28,6 +42,12 @@ public class RetailerController {
     
     @Autowired
     private JwtUtil jwtUtil;
+    
+    @Autowired
+    private NotificationService notificationService;
+    
+    @Autowired
+    private DashboardService dashboardService;
     
 
     @PostMapping("/register")
@@ -105,5 +125,37 @@ public class RetailerController {
     public String deleteRetailer(@PathVariable Integer id) {
         retailerService.deleteRetailer(id);
         return "Retailer deleted successfully";
+    }
+    
+    @GetMapping("/profile")
+    public ResponseEntity<RetailerProfileResponse> getRetailerProfile() {
+
+        return ResponseEntity.ok(retailerService.getRetailerProfile());
+    }
+
+    @PutMapping("/profile")
+    public ResponseEntity<RetailerProfileResponse> updateRetailerProfile(
+            @RequestBody UpdateRetailerProfileRequest request) {
+
+        return ResponseEntity.ok(retailerService.updateRetailerProfile(request));
+    }
+    
+    @GetMapping("/notifications")
+    public List<Notification> getNotifications() {
+
+        Retailer retailer = retailerService.getRetailerByEmail();
+
+        return notificationService.getNotifications(
+                retailer.getRetailerId(),
+                "RETAILER");
+    }
+    
+    @GetMapping("/dashboard")
+    public ResponseEntity<RetailerDashboardResponse> getDashboard() {
+
+        Retailer retailer = retailerService.getRetailerByEmail();
+
+        return ResponseEntity.ok(
+                dashboardService.getDashboard(retailer.getRetailerId()));
     }
 }

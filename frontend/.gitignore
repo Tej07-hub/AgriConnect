@@ -1,0 +1,27 @@
+# Maven
+backend/target/
+
+# Eclipse / STS
+backend/.metadata/
+backend/.classpath
+backend/.project
+backend/.settings/
+
+# IntelliJ
+.idea/
+*.iml
+
+# Spring secrets
+backend/backend/src/main/resources/application.properties
+
+# Environment files
+.env
+.env.*
+!.env.example
+
+# React
+frontend/node_modules/
+frontend/dist/
+
+# Logs
+*.log

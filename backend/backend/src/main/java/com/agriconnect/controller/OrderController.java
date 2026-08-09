@@ -1,12 +1,17 @@
 package com.agriconnect.controller;
 
+import java.util.List;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
+
+import com.agriconnect.dto.OrderRequest;
+import com.agriconnect.dto.OrderResponse;
+import com.agriconnect.dto.OrderStatusRequest;
 import com.agriconnect.entity.Order;
 import com.agriconnect.entity.OrderItem;
 import com.agriconnect.service.OrderService;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
 
 @RestController
 @RequestMapping("/api/orders")
@@ -15,36 +20,88 @@ public class OrderController {
     @Autowired
     private OrderService orderService;
 
-    @PostMapping("/place/{customerId}")
-    public Order placeOrder(@PathVariable Integer customerId) {
-        return orderService.placeOrder(customerId);
+    // ===========================
+    // CUSTOMER
+    // ===========================
+
+    // Place Order
+    @PostMapping("/place")
+    public ResponseEntity<Order> placeOrder(
+            @RequestBody OrderRequest request) {
+
+        return ResponseEntity.ok(
+                orderService.placeOrder(request)
+        );
     }
 
-    @GetMapping("/customer/{customerId}")
-    public List<Order> getOrders(@PathVariable Integer customerId) {
-        return orderService.getOrdersByCustomer(customerId);
+    // Get Logged-in Customer Orders
+    @GetMapping
+    public ResponseEntity<List<OrderResponse>> getMyOrders() {
+
+        return ResponseEntity.ok(
+                orderService.getMyOrders()
+        );
     }
-    
+
+    // Get Order Items
     @GetMapping("/{orderId}/items")
-    public List<OrderItem> getOrderItems(@PathVariable Integer orderId) {
-        return orderService.getOrderItems(orderId);
-    }
-    
-    @GetMapping("/retailer/{retailerId}")
-    public List<Order> getRetailerOrders(@PathVariable Integer retailerId) {
-        return orderService.getOrdersByRetailer(retailerId);
-    }
-    
-    @PutMapping("/{orderId}/status")
-    public Order updateOrderStatus(@PathVariable Integer orderId,
-                                   @RequestParam String status) {
+    public ResponseEntity<List<OrderItem>> getOrderItems(
+            @PathVariable Integer orderId) {
 
-        return orderService.updateOrderStatus(orderId, status);
+        return ResponseEntity.ok(
+                orderService.getOrderItems(orderId)
+        );
     }
-    
+
+    // Cancel Order
     @PutMapping("/{orderId}/cancel")
-    public Order cancelOrder(@PathVariable Integer orderId) {
-        return orderService.cancelOrder(orderId);
+    public ResponseEntity<Order> cancelOrder(
+            @PathVariable Integer orderId) {
+
+        return ResponseEntity.ok(
+                orderService.cancelOrder(orderId)
+        );
     }
-    
+
+
+    // ===========================
+    // RETAILER
+    // ===========================
+
+    // Get All Orders for Logged-in Retailer
+    @GetMapping("/retailer")
+    public ResponseEntity<List<Order>> getRetailerOrders() {
+
+        return ResponseEntity.ok(
+                orderService.getMyRetailerOrders()
+        );
+    }
+
+    // Get Specific Order Details for Logged-in Retailer
+    @GetMapping("/retailer/{orderId}")
+    public ResponseEntity<OrderResponse> getRetailerOrderDetails(
+            @PathVariable Integer orderId) {
+
+        return ResponseEntity.ok(
+                orderService.getRetailerOrderDetails(orderId)
+        );
+    }
+
+
+    // ===========================
+    // UPDATE ORDER STATUS
+    // ===========================
+
+    @PatchMapping("/{orderId}/status")
+    public ResponseEntity<Order> updateOrderStatus(
+            @PathVariable Integer orderId,
+            @RequestBody OrderStatusRequest request) {
+
+        Order order = orderService.updateOrderStatus(
+                orderId,
+                request.getStatus()
+        );
+
+        return ResponseEntity.ok(order);
+    }
 }

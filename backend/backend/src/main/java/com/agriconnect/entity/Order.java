@@ -1,9 +1,11 @@
 package com.agriconnect.entity;
 
 import java.math.BigDecimal;
+
 import java.time.LocalDateTime;
 
 import jakarta.persistence.*;
+
 
 @Entity
 @Table(name = "orders")
@@ -15,13 +17,35 @@ public class Order {
 
     private Integer customerId;
 
-    private BigDecimal totalAmount;
+    private LocalDateTime orderDate;
 
     private String status;
 
-    private LocalDateTime orderDate;
+    private BigDecimal totalAmount;
+    
+    @Column(name = "address_id", nullable = false)
+    private Integer addressId;
 
-    public Order() {
+    @Column(name = "payment_method", nullable = false)
+    private String paymentMethod;
+
+    public Integer getAddressId() {
+		return addressId;
+	}
+
+	public void setAddressId(Integer addressId) {
+		this.addressId = addressId;
+	}
+
+	public String getPaymentMethod() {
+		return paymentMethod;
+	}
+
+	public void setPaymentMethod(String paymentMethod) {
+		this.paymentMethod = paymentMethod;
+	}
+
+	public Order() {
     }
 
     public Integer getOrderId() {
@@ -40,15 +64,14 @@ public class Order {
         this.customerId = customerId;
     }
 
-    public BigDecimal getTotalAmount() {
-        return totalAmount;
+    public LocalDateTime getOrderDate() {
+        return orderDate;
     }
 
-    public void setTotalAmount(BigDecimal totalAmount) {
-        this.totalAmount = totalAmount;
+    public void setOrderDate(LocalDateTime orderDate) {
+        this.orderDate = orderDate;
     }
 
-    
     public String getStatus() {
         return status;
     }
@@ -57,11 +80,11 @@ public class Order {
         this.status = status;
     }
 
-    public LocalDateTime getOrderDate() {
-        return orderDate;
+    public BigDecimal getTotalAmount() {
+        return totalAmount;
     }
 
-    public void setOrderDate(LocalDateTime orderDate) {
-        this.orderDate = orderDate;
+    public void setTotalAmount(BigDecimal totalAmount) {
+        this.totalAmount = totalAmount;
     }
 }

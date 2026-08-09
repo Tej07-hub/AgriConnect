@@ -34,7 +34,9 @@ public class SecurityConfig {
         CorsConfiguration configuration = new CorsConfiguration();
 
         configuration.setAllowedOriginPatterns(List.of("http://localhost:*"));
-        configuration.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "OPTIONS"));
+        configuration.setAllowedMethods(
+        	    List.of("GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS")
+        	);
         configuration.setAllowedHeaders(List.of("*"));
         configuration.setAllowCredentials(true);
 
@@ -50,28 +52,46 @@ public class SecurityConfig {
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
 
         http
-            .cors(cors -> {})
-            .csrf(csrf -> csrf.disable())
-            .sessionManagement(session ->
-                session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
-            .authorizeHttpRequests(auth -> auth
+                .cors(cors -> {})
+                .csrf(csrf -> csrf.disable())
+                .sessionManagement(session ->
+                        session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
 
-            	    .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()
+                .authorizeHttpRequests(auth -> auth
 
-            	    .requestMatchers(HttpMethod.GET, "/api/products/**").permitAll()
+                        // Allow preflight requests
+                        .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()
 
-            	    .requestMatchers(
-            	        "/api/retailers/register",
-            	        "/api/retailers/login",
-            	        "/api/customers/register",
-            	        "/api/customers/login"
-            	    ).permitAll()
+                        // Public Authentication APIs
+                        .requestMatchers(
+                                "/api/retailers/register",
+                                "/api/retailers/login",
+                                "/api/customers/register",
+                                "/api/customers/login",
+                                "/api/admin/login",
+                                "/api/admin/register"
+                        ).permitAll()
 
-            	    .anyRequest().authenticated()
-            	)
+                     // Public Product APIs
+                        .requestMatchers(HttpMethod.GET, "/api/products/**").permitAll()
 
-            .addFilterBefore(jwtAuthenticationFilter,
-                    UsernamePasswordAuthenticationFilter.class);
+                        // Public Category APIs
+                        .requestMatchers(HttpMethod.GET, "/api/categories/**").permitAll()
+
+                        // Public Image Access
+                        .requestMatchers("/uploads/**").permitAll()
+
+                        // Retailer-only Upload API
+                        .requestMatchers("/api/upload/**").hasAuthority("RETAILER")
+
+                        // Everything else requires authentication
+                        .anyRequest().authenticated()
+                )
+
+                .addFilterBefore(
+                        jwtAuthenticationFilter,
+                        UsernamePasswordAuthenticationFilter.class
+                );
 
         return http.build();
     }

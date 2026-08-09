@@ -18,4 +18,5 @@ public interface RetailerRepository extends JpaRepository<Retailer, Integer> {
 
     boolean existsByMobile(String mobile);
 
+    
 }

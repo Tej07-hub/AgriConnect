@@ -27,4 +27,12 @@ public interface ProductRepository extends JpaRepository<Product, Integer> {
     List<Product> findByRetailerIdAndStockLessThan(Integer retailerId, Integer stock);
    
     long countByRetailerIdAndStockLessThan(Integer retailerId, Integer stock);
+
+    long countByRetailerIdAndStockLessThanEqual(Integer retailerId, Integer stock);
+
+    long countByRetailerIdAndStock(Integer retailerId, Integer stock);
+    
+    Optional<Product> findByProductId(Integer productId);
+
+    void deleteByProductId(Integer productId);
 }

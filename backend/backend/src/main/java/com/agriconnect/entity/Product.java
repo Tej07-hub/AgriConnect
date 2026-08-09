@@ -39,8 +39,27 @@ public class Product {
     private LocalDateTime createdAt;
 
     private LocalDateTime updatedAt;
+    
+    @Column(nullable = false)
+    private Boolean inStock = true;
 
-    @PrePersist
+    public Boolean getInStock() {
+		return inStock;
+	}
+
+	public void setInStock(Boolean inStock) {
+		this.inStock = inStock;
+	}
+
+	public void setCreatedAt(LocalDateTime createdAt) {
+		this.createdAt = createdAt;
+	}
+
+	public void setUpdatedAt(LocalDateTime updatedAt) {
+		this.updatedAt = updatedAt;
+	}
+
+	@PrePersist
     public void onCreate() {
         createdAt = LocalDateTime.now();
         updatedAt = LocalDateTime.now();
@@ -50,6 +69,8 @@ public class Product {
     public void onUpdate() {
         updatedAt = LocalDateTime.now();
     }
+    
+    
 
     // ===== Getters and Setters =====
 

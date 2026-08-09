@@ -3,8 +3,12 @@ package com.agriconnect.controller;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
+import com.agriconnect.dto.AddressRequest;
+import com.agriconnect.dto.AddressResponse;
 import com.agriconnect.entity.Address;
 import com.agriconnect.service.AddressService;
 
@@ -15,29 +19,40 @@ public class AddressController {
     @Autowired
     private AddressService addressService;
 
-    // Add Address
-    @PostMapping("/add")
-    public Address addAddress(@RequestBody Address address) {
-        return addressService.addAddress(address);
+    @PostMapping
+    public ResponseEntity<Address> addAddress(
+            @RequestBody AddressRequest request,
+            Authentication authentication) {
+
+        return ResponseEntity.ok(
+                addressService.addAddress(request, authentication));
     }
 
-    // Get Customer Addresses
-    @GetMapping("/customer/{customerId}")
-    public List<Address> getAddresses(@PathVariable Integer customerId) {
-        return addressService.getAddressesByCustomer(customerId);
+    @GetMapping
+    public ResponseEntity<List<AddressResponse>> getMyAddresses(
+            Authentication authentication) {
+
+        return ResponseEntity.ok(
+                addressService.getMyAddresses(authentication));
     }
 
-    // Update Address
     @PutMapping("/{addressId}")
-    public Address updateAddress(@PathVariable Integer addressId,
-                                 @RequestBody Address address) {
-        return addressService.updateAddress(addressId, address);
+    public ResponseEntity<Address> updateAddress(
+            @PathVariable Integer addressId,
+            @RequestBody AddressRequest request,
+            Authentication authentication) {
+
+        return ResponseEntity.ok(
+                addressService.updateAddress(addressId, request, authentication));
     }
 
-    // Delete Address
     @DeleteMapping("/{addressId}")
-    public String deleteAddress(@PathVariable Integer addressId) {
-        addressService.deleteAddress(addressId);
-        return "Address deleted successfully";
+    public ResponseEntity<String> deleteAddress(
+            @PathVariable Integer addressId,
+            Authentication authentication) {
+
+        addressService.deleteAddress(addressId, authentication);
+
+        return ResponseEntity.ok("Address deleted successfully.");
     }
 }

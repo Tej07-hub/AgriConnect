@@ -1,5 +1,8 @@
 package com.agriconnect.controller;
 
+import java.util.List;
+
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -10,6 +13,17 @@ import com.agriconnect.dto.RegisterCustomerRequest;
 import com.agriconnect.entity.Customer;
 import com.agriconnect.security.JwtUtil;
 import com.agriconnect.service.CustomerService;
+import com.agriconnect.service.NotificationService;
+import com.agriconnect.dto.CustomerProfileResponse;
+import com.agriconnect.dto.UpdateCustomerProfileRequest;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+
+import com.agriconnect.entity.Notification;
+
+import org.springframework.security.core.Authentication;
 
 @RestController
 @RequestMapping("/api/customers")
@@ -21,6 +35,9 @@ public class CustomerController {
 
     @Autowired
     private JwtUtil jwtUtil;
+    
+    @Autowired
+    private NotificationService notificationService;
 
     @PostMapping("/register")
     public ApiResponse registerCustomer(
@@ -75,5 +92,60 @@ public class CustomerController {
                 null
         );
     
+    }
+    @GetMapping("/profile")
+    public ResponseEntity<CustomerProfileResponse> getCustomerProfile() {
+
+        CustomerProfileResponse response = customerService.getCustomerProfile();
+
+        return ResponseEntity.ok(response);
+    }
+    
+    @PutMapping("/profile")
+    public ResponseEntity<CustomerProfileResponse> updateCustomerProfile(
+            @RequestBody UpdateCustomerProfileRequest request) {
+
+        CustomerProfileResponse response =
+                customerService.updateCustomerProfile(request);
+
+        return ResponseEntity.ok(response);
+    }
+    
+    @GetMapping("/notifications")
+    public List<Notification> getNotifications(Authentication authentication) {
+
+        Customer customer = customerService.getCustomerByEmail(authentication.getName());
+
+        return notificationService.getNotifications(
+                customer.getCustomerId(),
+                "CUSTOMER");
+    }
+    
+    @PatchMapping("/notifications/{id}/read")
+    public Notification markAsRead(@PathVariable Integer id) {
+
+        return notificationService.markAsRead(id);
+    }
+    
+    @PatchMapping("/notifications/read-all")
+    public String markAllAsRead(Authentication authentication) {
+
+        Customer customer = customerService.getCustomerByEmail(authentication.getName());
+
+        notificationService.markAllAsRead(
+                customer.getCustomerId(),
+                "CUSTOMER");
+
+        return "All notifications marked as read.";
+    }
+    
+    @GetMapping("/notifications/unread-count")
+    public long getUnreadCount(Authentication authentication) {
+
+        Customer customer = customerService.getCustomerByEmail(authentication.getName());
+
+        return notificationService.getUnreadCount(
+                customer.getCustomerId(),
+                "CUSTOMER");
     }
 }

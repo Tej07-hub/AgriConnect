@@ -10,10 +10,8 @@ import com.agriconnect.entity.Order;
 public interface OrderRepository extends JpaRepository<Order, Integer> {
 
     List<Order> findByCustomerId(Integer customerId);
-    Optional<Order> findById(Integer orderId);
+    
+    Optional<Order> findByOrderId(Integer orderId);
     
     long countByStatus(String status);
-
-    List<Order> findByStatus(String status);
-
 }
