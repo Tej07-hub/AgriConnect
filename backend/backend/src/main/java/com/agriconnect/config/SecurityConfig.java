@@ -33,7 +33,10 @@ public class SecurityConfig {
 
         CorsConfiguration configuration = new CorsConfiguration();
 
-        configuration.setAllowedOriginPatterns(List.of("http://localhost:*"));
+        configuration.setAllowedOriginPatterns(List.of(
+        	    "http://localhost:*",
+        	    "https://agriconnect-frontend-3uzv.onrender.com"
+        	));
         configuration.setAllowedMethods(
         	    List.of("GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS")
         	);

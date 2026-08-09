@@ -1,7 +1,7 @@
 import axios from "axios";
 
 const API = axios.create({
-  baseURL: "http://localhost:8080/api",
+  baseURL: "https://agriconnect-5ofk.onrender.com/api",
 });
 
 // Attach customer JWT
@@ -47,3 +47,4 @@ export const deleteAddress = async (addressId) => {
 };
 
 export default API;
+

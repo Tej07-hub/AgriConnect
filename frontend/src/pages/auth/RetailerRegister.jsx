@@ -420,3 +420,4 @@ function RetailerRegister() {
 }
 
 export default RetailerRegister;
+

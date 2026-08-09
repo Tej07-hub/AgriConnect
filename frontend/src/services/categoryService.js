@@ -1,9 +1,10 @@
 import axios from "axios";
 
 const API = axios.create({
-  baseURL: "http://localhost:8080/api",
+  baseURL: "https://agriconnect-5ofk.onrender.com/api",
 });
 
 export const getAllCategories = () => {
   return API.get("/categories");
 };
+

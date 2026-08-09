@@ -19,3 +19,4 @@ export const logoutCustomer = () => {
   localStorage.removeItem("customerToken");
   localStorage.removeItem("customerId");
 };
+

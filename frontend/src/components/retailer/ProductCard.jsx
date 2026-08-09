@@ -74,3 +74,4 @@ const ProductCard = ({ product, onDelete }) => {
 };
 
 export default ProductCard;
+

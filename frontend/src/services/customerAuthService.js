@@ -1,7 +1,7 @@
 import axios from "axios";
 
 const API = axios.create({
-  baseURL: "http://localhost:8080/api",
+  baseURL: "https://agriconnect-5ofk.onrender.com/api",
 });
 
 // Attach customer JWT automatically
@@ -53,3 +53,4 @@ export const updateCustomerProfile = async (customerData) => {
 };
 
 export default API;
+

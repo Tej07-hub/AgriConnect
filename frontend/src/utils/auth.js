@@ -15,3 +15,4 @@ export const logoutRetailer = () => {
 export const isRetailerLoggedIn = () => {
   return !!localStorage.getItem("retailerToken");
 };
+

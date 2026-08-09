@@ -466,3 +466,4 @@ const RetailerOrderDetails = () => {
 };
 
 export default RetailerOrderDetails;
+
