@@ -7,6 +7,7 @@ import { Routes, Route, Navigate } from "react-router-dom";
 import RetailerLogin from "./pages/auth/RetailerLogin";
 import RetailerRegister from "./pages/auth/RetailerRegister";
 import CustomerLogin from "./pages/auth/CustomerLogin";
+import CustomerRegister from "./pages/CustomerRegister";
 
 // =========================
 // RETAILER
@@ -44,7 +45,6 @@ import Products from "./components/Products";
 import ProtectedRoute from "./components/auth/ProtectedRoute";
 import CustomerProtectedRoute from "./components/auth/CustomerProtectedRoute";
 
-
 function App() {
   return (
     <Routes>
@@ -58,7 +58,6 @@ function App() {
         element={<Home />}
       />
 
-
       {/* =====================================================
           PUBLIC PRODUCTS PAGE
       ===================================================== */}
@@ -67,7 +66,6 @@ function App() {
         path="/products"
         element={<Products />}
       />
-
 
       {/* =====================================================
           CUSTOMER AUTH
@@ -78,6 +76,10 @@ function App() {
         element={<CustomerLogin />}
       />
 
+      <Route
+        path="/customer/register"
+        element={<CustomerRegister />}
+      />
 
       {/* =====================================================
           CUSTOMER HOME
@@ -92,7 +94,6 @@ function App() {
         }
       />
 
-
       {/* =====================================================
           CUSTOMER CART
       ===================================================== */}
@@ -105,7 +106,6 @@ function App() {
           </CustomerProtectedRoute>
         }
       />
-
 
       {/* =====================================================
           CUSTOMER CHECKOUT
@@ -120,7 +120,6 @@ function App() {
         }
       />
 
-
       {/* =====================================================
           CUSTOMER ORDERS
       ===================================================== */}
@@ -133,7 +132,6 @@ function App() {
           </CustomerProtectedRoute>
         }
       />
-
 
       {/* =====================================================
           CUSTOMER ORDER DETAILS
@@ -148,7 +146,6 @@ function App() {
         }
       />
 
-
       {/* =====================================================
           RETAILER REGISTER
       ===================================================== */}
@@ -158,7 +155,6 @@ function App() {
         element={<RetailerRegister />}
       />
 
-
       {/* =====================================================
           RETAILER LOGIN
       ===================================================== */}
@@ -167,7 +163,6 @@ function App() {
         path="/retailer/login"
         element={<RetailerLogin />}
       />
-
 
       {/* =====================================================
           RETAILER DASHBOARD
@@ -212,7 +207,6 @@ function App() {
 
       </Route>
 
-
       {/* =====================================================
           RETAILER ORDERS
       ===================================================== */}
@@ -226,7 +220,6 @@ function App() {
         }
       />
 
-
       {/* =====================================================
           RETAILER ORDER DETAILS
       ===================================================== */}
@@ -239,7 +232,6 @@ function App() {
           </ProtectedRoute>
         }
       />
-
 
       {/* =====================================================
           FALLBACK
@@ -260,4 +252,3 @@ function App() {
 }
 
 export default App;
-

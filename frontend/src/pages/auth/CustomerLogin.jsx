@@ -51,10 +51,10 @@ const CustomerLogin = () => {
           replace: true,
         });
       } else {
-        setError(response.message);
+        setError(response.message || "Invalid email or password");
       }
     } catch (error) {
-      console.error(error);
+      console.error("Customer login error:", error);
 
       setError(
         error.response?.data?.message ||
@@ -66,9 +66,11 @@ const CustomerLogin = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-green-100 via-white to-green-50 flex items-center justify-center p-6">
+    <div className="min-h-screen flex items-center justify-center bg-gray-50 px-4">
 
       <div className="w-full max-w-md bg-white rounded-2xl shadow-xl p-8">
+
+        {/* Icon */}
 
         <div className="flex justify-center mb-6">
           <div className="bg-green-100 p-4 rounded-full">
@@ -79,6 +81,8 @@ const CustomerLogin = () => {
           </div>
         </div>
 
+        {/* Heading */}
+
         <h1 className="text-3xl font-bold text-center">
           Customer Login
         </h1>
@@ -87,11 +91,15 @@ const CustomerLogin = () => {
           Welcome back to AgriConnect
         </p>
 
+        {/* Error */}
+
         {error && (
           <div className="bg-red-100 text-red-700 rounded-lg p-3 mb-5">
             {error}
           </div>
         )}
+
+        {/* Login Form */}
 
         <form
           onSubmit={handleSubmit}
@@ -99,6 +107,7 @@ const CustomerLogin = () => {
         >
 
           {/* Email */}
+
           <div>
             <label className="block mb-2 font-medium">
               Email
@@ -110,11 +119,13 @@ const CustomerLogin = () => {
               required
               value={form.email}
               onChange={handleChange}
+              placeholder="Enter your email"
               className="w-full border rounded-lg p-3 focus:ring-2 focus:ring-green-600 outline-none"
             />
           </div>
 
           {/* Password */}
+
           <div>
             <label className="block mb-2 font-medium">
               Password
@@ -132,6 +143,7 @@ const CustomerLogin = () => {
                 required
                 value={form.password}
                 onChange={handleChange}
+                placeholder="Enter your password"
                 className="w-full border rounded-lg p-3 pr-12 focus:ring-2 focus:ring-green-600 outline-none"
               />
 
@@ -140,7 +152,7 @@ const CustomerLogin = () => {
                 onClick={() =>
                   setShowPassword(!showPassword)
                 }
-                className="absolute top-3.5 right-4"
+                className="absolute top-3.5 right-4 text-gray-500"
               >
                 {showPassword ? (
                   <EyeOff size={20} />
@@ -151,6 +163,8 @@ const CustomerLogin = () => {
 
             </div>
           </div>
+
+          {/* Login Button */}
 
           <button
             type="submit"
@@ -164,10 +178,31 @@ const CustomerLogin = () => {
 
         </form>
 
+        {/* Register */}
+
+        <div className="text-center mt-6">
+
+          <p className="text-gray-500">
+            Don't have an account?{" "}
+
+            <button
+              type="button"
+              onClick={() =>
+                navigate("/customer/register")
+              }
+              className="text-green-700 font-semibold hover:underline"
+            >
+              Register
+            </button>
+
+          </p>
+
+        </div>
+
       </div>
+
     </div>
   );
 };
 
 export default CustomerLogin;
-

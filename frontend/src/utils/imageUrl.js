@@ -1,4 +1,4 @@
-const BACKEND_URL = "https://agriconnect-5ofk.onrender.com";
+const BACKEND_URL = "http://localhost:8080";
 
 export const getImageUrl = (imageUrl) => {
   if (!imageUrl) {
@@ -18,4 +18,5 @@ export const getImageUrl = (imageUrl) => {
 
   return `${BACKEND_URL}/${imageUrl}`;
 };
+
 

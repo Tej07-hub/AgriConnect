@@ -132,7 +132,7 @@ function Categories() {
             >
               <div className="h-56 overflow-hidden bg-gray-100">
                 <img
-                  src={`https://agriconnect-5ofk.onrender.com/uploads/${category.imageUrl}`}
+                  src={`http://localhost:8080/uploads/${category.imageUrl}`}
                   alt={category.name}
                   className="h-full w-full object-cover transition duration-500 group-hover:scale-110"
                   onError={(e) => {
@@ -165,4 +165,5 @@ function Categories() {
 }
 
 export default Categories;
+
 

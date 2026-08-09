@@ -16,3 +16,4 @@ export const isRetailerLoggedIn = () => {
   return !!localStorage.getItem("retailerToken");
 };
 
+

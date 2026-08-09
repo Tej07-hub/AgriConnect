@@ -20,3 +20,4 @@ export const logoutCustomer = () => {
   localStorage.removeItem("customerId");
 };
 
+
