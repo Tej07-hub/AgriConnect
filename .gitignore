@@ -11,8 +11,6 @@ backend/backend/.settings/
 .idea/
 *.iml
 
-# Spring configuration / secrets
-backend/backend/src/main/resources/application.properties
 
 # Environment files
 .env
