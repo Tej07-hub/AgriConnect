@@ -35,7 +35,7 @@ public class SecurityConfig {
 
         configuration.setAllowedOriginPatterns(List.of(
         	    "http://localhost:*",
-        	    "https://agriconnect-frontend-3uzv.onrender.com"
+        	    "https://agriconnect-frontend-ua62.onrender.com/"
         	));
         configuration.setAllowedMethods(
         	    List.of("GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS")
